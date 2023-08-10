@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinhe o Número</title>
+
+    <style>
+        .title {
+            margin: auto;
+            width: 50%;
+            height: 50%;
+            padding: 10px 10px 10px 50%;
+        }
+
+        .center {
+            margin: auto;
+            width: 60%;
+            height: 50%;
+            padding: 10px 30px 10px 10px;
+        }
+
+        .envioPalpite {
+            padding: 10px;
+
+        }
+
+        .resetButton {
+            padding: 10px;
+            width: 69.4%;
+            margin-top: 3px;
+        }
+
+        .ultimoResultado {
+            width: 69.4%;
+        }
+
+        .cheat {
+            width: 69.4%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="firstLine center">
+        <label class="mensagemPalpite ">Digite seu palpite: </label>
+        <br>
+        <input type="text" class="userText center" />
+        <button type="button" class="envioPalpite"> Enviar </button>
+        <br>
+        <button type="button" class="resetButton">Reiniciar Jogo</button>
+        <label class="round"></label>
+        <p class="palpites"></p>
+        <p class="ultimoResultado"></p>
+        <p class="baixoOuAlto"></p>
+        <p class="cheat"></p>
+    </div>
+
+
+
+
+    <script>
+        let userText = document.querySelector('.userText');
+        let botaoEnviar = document.querySelector('.envioPalpite');
+        let ultimoResultado = document.querySelector('.ultimoResultado')
+        let palpites = document.querySelector('.palpites');
+        let rand;
+        let round;
+        let play = true;
+        let retorno;
+        let botaoReset = document.querySelector('.resetButton')
+        let cheat = false;
+        let cheatLabel = document.querySelector('.cheat');
+
+        botaoEnviar.addEventListener('click', verificaPalpite);
+        botaoReset.addEventListener('click', iniciaJogo);
+
+        iniciaJogo();
+
+        userText.focus();
+
+
+
+        function verificaPalpite() {
+            if (userText.value == 'cheatON') {
+                cheat = true;
+                cheatLabel.textContent = "Você está trapaceando! A resposta é " + rand;
+                cheatLabel.style.backgroundColor = 'grey';
+                return 0;
+            } else if (round > 9) {
+                ultimoResultado.textContent = 'Você perdeu!';
+                ultimoResultado.style.backgroundColor = "red";
+                geraBotao();
+                return 0;
+            } else if (isNaN(userText.value)) {
+                //input inválida
+                ultimoResultado.textContent = 'O valor enviado é inválido';
+                ultimoResultado.style.backgroundColor = "yellow";
+                return false;
+            } else if (userText.value == rand) {
+                //usuário venceu o jogo
+                ultimoResultado.textContent = 'Você venceu!';
+                ultimoResultado.style.backgroundColor = "lightGreen";
+                userWin();
+                return 0;
+            } else if (userText.value > rand) {
+                //valor digitado é maior que sorteado
+                ultimoResultado.textContent = 'O número sorteado é menor que o valor digitado!';
+                ultimoResultado.style.backgroundColor = "yellow";
+            } else {
+                //valor digitado é menorque sorteado
+                ultimoResultado.textContent = 'O número sorteado é maior que o valor digitado!';
+                ultimoResultado.style.backgroundColor = "yellow";
+            }
+            incrementaRound();
+            palpites.textContent += userText.value + ' ';
+            return true;
+
+        }
+
+        function geraRand() {
+            let randNum = Math.floor(Math.random() * 100) + 1;
+            console.log('Número gerado: ' + randNum)
+            return randNum;
+        }
+
+        function iniciaJogo() {
+            cheatLabel.textContent = "";
+            cheat = false;
+            rand = geraRand();
+            round = 0;
+            incrementaRound();
+            palpites.textContent = "Palpites: "
+            ultimoResultado.textContent = "";
+            if (cheat) {
+                document.querySelector(cheat).textContent = "Você está trapaceando! A resposta é " + rand;
+            }
+
+
+        }
+
+        function geraBotao() {
+
+
+
+        }
+
+        function incrementaRound() {
+            round++;
+            document.querySelector('.round').innerHTML = "<p>Rodada: " + round + '</p>';
+        }
+
+        function userWin() {
+            alert("Você venceu! O resultado era: " + rand + " e você acertou!");
+        }
+
+
+
+    </script>
+</body>
+
+</html>
